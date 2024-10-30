@@ -51,6 +51,49 @@
       color: #fff;
       width: 100%;
     }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .checklist {
+      list-style-type: none;
+      padding: 0;
+    }
+    .checklist li {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      background: #f9f9f9;
+      margin: 5px 0;
+      border-radius: 4px;
+    }
+    .checklist input[type="checkbox"] {
+      margin-right: 10px;
+    }
+    .button {
+      padding: 10px 15px;
+      color: #fff;
+      background-color: #0073e6;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .share-input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #0073e6;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
   </style>
 </head>
 <body>
@@ -61,40 +104,139 @@
   </header>
 
   <div class="container">
+    <!-- Packing List Generator with Weather Integration -->
     <section class="feature">
-      <h2>1. Smart Packing Lists</h2>
-      <p>Simply input your trip details like destination, duration, weather, and planned activities. PackPerfect will generate a tailored packing list so you never forget an essential item, whether it's beachwear, hiking gear, or business attire.</p>
+      <h2>Smart Packing Lists (Weather-Integrated)</h2>
+      <div class="form-group">
+        <label for="destination">Destination</label>
+        <input type="text" id="destination" placeholder="e.g., Beach, Mountains">
+      </div>
+      <div class="form-group">
+        <label for="duration">Duration (days)</label>
+        <input type="number" id="duration" min="1" placeholder="e.g., 5">
+      </div>
+      <div class="form-group">
+        <label for="activities">Activities</label>
+        <select id="activities" multiple>
+          <option value="beach">Beach</option>
+          <option value="hiking">Hiking</option>
+          <option value="business">Business</option>
+        </select>
+      </div>
+      <button class="button" onclick="generatePackingList()">Generate Packing List</button>
+
+      <h3>Packing List (based on weather)</h3>
+      <ul id="packing-list" class="checklist"></ul>
     </section>
 
+    <!-- Multi-Destination Packing Optimization -->
     <section class="feature">
-      <h2>2. Customizable and Savable Lists</h2>
-      <p>Customize and save lists for different trip types like "weekend getaway," "business trip," or "family vacation." Save them for easy reuse or fine-tune them as needed for future travels.</p>
+      <h2>Multi-Destination Packing</h2>
+      <p>Add multiple destinations for customized packing tips.</p>
+      <div id="destinations-container"></div>
+      <button class="button" onclick="addDestination()">Add Another Destination</button>
     </section>
 
+    <!-- In-App Itinerary Planner -->
     <section class="feature">
-      <h2>3. Reminders and Alerts</h2>
-      <p>Set reminders for last-minute items such as chargers or toiletries. PackPerfect can also notify you of items to add based on real-time weather updates, so you can avoid surprises.</p>
+      <h2>Itinerary Planner</h2>
+      <div class="form-group">
+        <label for="itinerary">Add daily plans:</label>
+        <input type="text" id="itinerary-input" placeholder="e.g., Visit Eiffel Tower">
+        <button class="button" onclick="addItinerary()">Add to Itinerary</button>
+      </div>
+      <ul id="itinerary-list" class="checklist"></ul>
     </section>
 
+    <!-- Reminders and Alerts -->
     <section class="feature">
-      <h2>4. Checklists with Progress Tracking</h2>
-      <p>Track your packing progress by checking off items as you pack. PackPerfect ensures you see exactly what you've packed and what's still needed, making the packing process more efficient.</p>
+      <h2>Reminders and Alerts</h2>
+      <button class="button" onclick="addReminder()">Add Reminder</button>
+      <ul id="reminders-list" class="checklist"></ul>
     </section>
 
+    <!-- Shared Packing Lists -->
     <section class="feature">
-      <h2>5. Shared Packing Lists</h2>
-      <p>For group or family trips, PackPerfect allows you to share packing lists with others and assign items to specific members, so everyone has what they need for a successful trip.</p>
+      <h2>Shared Packing Lists</h2>
+      <p>Share your packing list with travel partners:</p>
+      <input type="text" id="share-link" class="share-input" value="https://packperfect.app/list123" readonly>
+      <button class="button" onclick="copyLink()">Copy Link</button>
     </section>
 
+    <!-- Smart Packing Tips and Recommendations -->
     <section class="feature">
-      <h2>6. Smart Packing Tips and Recommendations</h2>
-      <p>Get expert packing tips, like space-saving folding techniques and best practices for organizing your carry-on essentials, making packing simpler and more effective.</p>
+      <h2>Smart Packing Tips and Recommendations</h2>
+      <p id="packing-tips">Click below for a helpful packing tip!</p>
+      <button class="button" onclick="showRandomTip()">Get a Packing Tip</button>
     </section>
   </div>
 
   <footer class="footer">
     <p>&copy; 2024 PackPerfect. All rights reserved.</p>
   </footer>
+
+  <script>
+    function generatePackingList() {
+      const packingListEl = document.getElementById('packing-list');
+      packingListEl.innerHTML = ''; // Clear previous list
+      const items = ['Toothbrush', 'Shampoo', 'Sunscreen', 'Clothes', 'Snacks'];
+      // Additional logic to fetch and incorporate weather data goes here
+
+      items.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = `<input type="checkbox"> ${item}`;
+        packingListEl.appendChild(li);
+      });
+    }
+
+    function addDestination() {
+      const container = document.getElementById('destinations-container');
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.placeholder = 'Enter another destination';
+      input.className = 'form-group';
+      container.appendChild(input);
+    }
+
+    function addItinerary() {
+      const itineraryInput = document.getElementById('itinerary-input').value;
+      if (itineraryInput) {
+        const itineraryList = document.getElementById('itinerary-list');
+        const li = document.createElement('li');
+        li.innerHTML = `<input type="checkbox"> ${itineraryInput}`;
+        itineraryList.appendChild(li);
+      }
+    }
+
+    function addReminder() {
+      const reminderText = prompt("Enter a last-minute item to remember:");
+      if (reminderText) {
+        const remindersList = document.getElementById('reminders-list');
+        const li = document.createElement('li');
+        li.innerHTML = `<input type="checkbox"> ${reminderText}`;
+        remindersList.appendChild(li);
+      }
+    }
+
+    function copyLink() {
+      const shareLink = document.getElementById('share-link');
+      shareLink.select();
+      document.execCommand('copy');
+      alert('Link copied to clipboard!');
+    }
+
+    function showRandomTip() {
+      const tips = [
+        "Roll your clothes to save space.",
+        "Use packing cubes for better organization.",
+        "Place heavier items at the bottom of your bag.",
+        "Bring a portable charger for long trips.",
+        "Pack a small first-aid kit for emergencies."
+      ];
+      const randomTip = tips[Math.floor(Math.random() * tips.length)];
+      document.getElementById('packing-tips').textContent = randomTip;
+    }
+  </script>
 
 </body>
   </html>
